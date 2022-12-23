@@ -1,4 +1,6 @@
 import copy
+
+import loguru
 import requests
 
 
@@ -16,7 +18,7 @@ weight = 0
 volume = 0
 
 for gift in gifts:
-    if gift['weight'] + weight > 200 or gift['volume'] + volume > 100:
+    if gift['weight'] + weight >= 200 or gift['volume'] + volume >= 100:
         next_bag.append(gift)
         gifts_bag_copy = copy.deepcopy(gifts_bag)
         stackOfBags.append(gifts_bag_copy)
@@ -31,9 +33,16 @@ for gift in gifts:
         weight += gift['weight']
         volume += gift['volume']
 
-stackOfBags.append(gifts_bag)
 
+last_gift = gifts_bag[-1]
+stackOfBags.append(gifts_bag[0: -1])
+stackOfBags.append([last_gift])
+_len = 0
+for i in stackOfBags:
+    _len += len(i)
+print(_len)
 
+#
 # _request = requests.post('https://datsanta.dats.team/api/round',
 #                          headers={
 #                              'content-type': 'application/json',
@@ -46,3 +55,12 @@ stackOfBags.append(gifts_bag)
 #                                }
 #                          )
 # print(_request.text)
+
+
+print(requests.get('https://datsanta.dats.team/api/round/01GN013WRQ13B9V4C495GYCNFB',
+                   headers={'X-API-Key': 'dbf6c320-65af-4558-bba6-8f4714ea69c3',
+                            'content-type': 'application/json',
+                            },
+
+                   ).text
+      )
