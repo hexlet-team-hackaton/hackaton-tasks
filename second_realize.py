@@ -1,5 +1,6 @@
 import copy
 import requests
+import itertools
 
 
 MAP = 'https://datsanta.dats.team/json/map/' \
@@ -10,3 +11,10 @@ WEIGHT = 200
 
 def get_data() -> dict:
     return requests.get(MAP).json()
+
+
+# gifts = get_data()['gifts']
+# gifts_24 = gifts[:24]
+#
+# moves = get_data()['children']
+# print(list(itertools.islice(moves, None, len(gifts_24))))
