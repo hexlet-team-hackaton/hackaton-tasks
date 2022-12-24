@@ -14,35 +14,42 @@ moves: list[dict] = moves_by_coord
 
 gifts_bag = list()
 next_bag = list()
+next_coord = list()
 weight = 0
 volume = 0
 
+
 for gift in gifts:
-    if gift['weight'] + weight >= 200 or gift['volume'] + volume >= 100:
+    _id = gift['id']
+    if gift['weight'] + weight > 200 or gift['volume'] + volume > 100:
         next_bag.append(gift)
         gifts_bag_copy = copy.deepcopy(gifts_bag)
         stackOfBags.append(gifts_bag_copy)
+        moves.insert(_id - 1, {'x': 0, 'y': 0})
         gifts_bag.clear()
         weight = 0
         volume = 0
     else:
         if len(next_bag) != 0:
             gifts_bag.append(next_bag[0]['id'])
+            weight += next_bag[0]['weight']
+            volume += next_bag[0]['volume']
             next_bag.clear()
         gifts_bag.append(gift['id'])
         weight += gift['weight']
         volume += gift['volume']
 
 
-last_gift = gifts_bag[-1]
-stackOfBags.append(gifts_bag[0: -1])
-stackOfBags.append([last_gift])
-_len = 0
-for i in stackOfBags:
-    _len += len(i)
-print(_len)
+last_gift = gifts_bag[-3:]
+stackOfBags.append(gifts_bag[0: -3])
+stackOfBags.append(last_gift)
 
+# for i in stackOfBags:
+#     _len += len(i)
+# print(_len)
 #
+# print(moves)
+
 # _request = requests.post('https://datsanta.dats.team/api/round',
 #                          headers={
 #                              'content-type': 'application/json',
@@ -56,11 +63,10 @@ print(_len)
 #                          )
 # print(_request.text)
 
-
-print(requests.get('https://datsanta.dats.team/api/round/01GN013WRQ13B9V4C495GYCNFB',
-                   headers={'X-API-Key': 'dbf6c320-65af-4558-bba6-8f4714ea69c3',
-                            'content-type': 'application/json',
-                            },
-
-                   ).text
-      )
+# print(moves)
+print(requests.get(
+    'https://datsanta.dats.team/api/round/01GN0QVWQX9150Y1PV54APPBGR',
+    headers={'X-API-Key': 'dbf6c320-65af-4558-bba6-8f4714ea69c3',
+             'content-type': 'application/json',
+             },
+).text)
